@@ -150,10 +150,11 @@ func (e *Entry) Trace(msg string) *Entry {
 // Stop should be used with Trace, to fire off the completion message. When
 // an `err` is passed the "error" field is set, and the log level is error.
 func (e *Entry) Stop(err *error) {
+	v := e.WithField("start", e.start).WithDuration(time.Since(e.start))
 	if err == nil || *err == nil {
-		e.WithDuration(time.Since(e.start)).Info(e.Message)
+		v.Info(e.Message)
 	} else {
-		e.WithDuration(time.Since(e.start)).WithError(*err).Error(e.Message)
+		v.WithError(*err).Error(e.Message)
 	}
 }
 
